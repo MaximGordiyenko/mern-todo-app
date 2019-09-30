@@ -46,9 +46,9 @@ todoRoutes.route('/update/:id').post((req, res) => {
             res.status(404).send("data is not found");
         else
             todo.text = req.body.text;
-            todo.user_id = req.body.user_id;
-            todo.completed = req.body.completed;
-            todo.create_data = req.body.create_data;
+        //todo.user_id = req.body.user_id;
+        todo.completed = req.body.completed;
+        todo.create_data = req.body.create_data;
 
         todo.save().then(todo => {
             res.json('Todo updated!');

@@ -17,7 +17,7 @@ export default class CreateTodo extends Component {
 
     changeDate = () => {
         this.setState({
-            create_data: new Date()
+            create_data: new Date().toDateString()
         });
     };
 
@@ -31,7 +31,7 @@ export default class CreateTodo extends Component {
 
         const newTodo = {
             text: this.state.text,
-            user_id: this.state.user_id,
+            // user_id: this.state.user_id,
             completed: this.state.completed,
             create_data: this.state.create_data
         };
@@ -61,7 +61,7 @@ export default class CreateTodo extends Component {
                       />
                   </div>
                   <div className="form-group">
-                      <label>Data: </label>
+                      <label>Data:</label>
                       <input
                         type="text"
                         className="form-control"
