@@ -10,8 +10,8 @@ export default class EditTodo extends Component {
         create_data: '',
     };
 
-    componentDidMount = () => {
-        axios.get(`http://localhost:4000/todos/${this.props.match.params.id}`)
+    componentDidMount() {
+        axios.get('http://localhost:4000/todos/' + this.props.match.params.id)
           .then(response => {
               this.setState({
                   text: response.data.text,
@@ -37,7 +37,7 @@ export default class EditTodo extends Component {
         });
     };
 
-    changeCompleted = (e) => {
+    changeCompleted = () => {
         this.setState({
             completed: !this.state.completed
         });
@@ -52,7 +52,7 @@ export default class EditTodo extends Component {
             create_data: this.state.create_data
         };
         console.log(obj);
-        axios.post(`http://localhost:4000/todos/update/${this.props.match.params.id}, ${obj}`)
+        axios.post('http://localhost:4000/todos/update/'+this.props.match.params.id, obj)
           .then(res => console.log(res.data));
 
         this.props.history.push('/');

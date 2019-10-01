@@ -42,20 +42,20 @@ todoRoutes.route('/:id').get((req, res) => {
 
 todoRoutes.route('/update/:id').post((req, res) => {
     Todo.findById(req.params.id, (err, todo) => {
-        if (!todo)
+        if (!todo) {
             res.status(404).send("data is not found");
-        else
+        } else {
             todo.text = req.body.text;
-        //todo.user_id = req.body.user_id;
-        todo.completed = req.body.completed;
-        todo.create_data = req.body.create_data;
-
-        todo.save().then(todo => {
-            res.json('Todo updated!');
-        })
-          .catch(err => {
-              res.status(400).send("Update not possible");
-          });
+            todo.user_id = req.body.user_id;
+            todo.completed = req.body.completed;
+            todo.create_data = req.body.create_data;
+            todo.save().then(todo => {
+                res.json('Todo updated!');
+            })
+              .catch(err => {
+                  res.status(400).send("Update not possible");
+              });
+        }
     });
 });
 
