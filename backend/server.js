@@ -1,4 +1,5 @@
 const express = require('express');
+const morgan = require('morgan');
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -8,6 +9,7 @@ const PORT = 4000;
 
 let Todo = require('./todo');
 
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -75,5 +77,5 @@ todoRoutes.route('/add').post((req, res) => {
 app.use('/todos', todoRoutes);
 
 app.listen(PORT, () => {
-    console.log("Server is running on Port: " + PORT);
+    console.debug("Server is running on Port: " + PORT);
 });
