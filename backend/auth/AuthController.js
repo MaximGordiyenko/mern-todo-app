@@ -1,32 +1,35 @@
 let express = require('express');
 let router = express.Router();
 let bodyParser = require('body-parser');
-router.use(bodyParser.urlencoded({extended: false}));
-router.use(bodyParser.json());
 let User = require('../user/User');
-
 let bcrypt = require('bcryptjs');
 let jwt = require('jsonwebtoken');
 let config = require('../config');
 let VerifyToken = require('./VerifyToken');
 
-router.post('/login', function (req, res) {
-    User.findOne({email: req.body.email}, function (err, user) {
-        if (err) return res.status(500).send('Error on the server.');
-        if (!user) return res.status(404).send('No user found.');
+router.use(bodyParser.urlencoded({extended: false}));
+router.use(bodyParser.json());
 
-        // .compareSync() method compare the password sent with the request to the password in the database
-        let passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
-        if (!passwordIsValid) return res.status(401).send({auth: false, token: null});
+router.post('/login',
+  (req, res) => {
+      User.findOne(
+        {email: req.body.email},
+        (err, user) => {
+            if (err) return res.status(500).send('Error on the server.');
+            if (!user) return res.status(404).send('No user found.');
 
-        let token = jwt.sign({id: user._id}, config.secret, {
-            expiresIn: 86400 // expires in 24 hours
+            // .compareSync() method compare the password sent with the request to the password in the database
+            let passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
+            if (!passwordIsValid) return res.status(401).send({auth: false, token: null});
+
+            let token = jwt.sign({id: user._id}, config.secret, {
+                expiresIn: 86400 // expires in 24 hours
+            });
+
+            res.status(200).send({auth: true, token: token});
         });
 
-        res.status(200).send({auth: true, token: token});
-    });
-
-});
+  });
 
 router.post('/register', (req, res) => {
     let hashedPassword = bcrypt.hashSync(req.body.password, 8);

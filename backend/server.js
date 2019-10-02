@@ -8,12 +8,12 @@ const mongoose = require('mongoose');
 const todoRoutes = express.Router();
 const PORT = 4000;
 const authRouter = require('./auth/AuthController');
-
-let Todo = require('./todo');
+const Todo = require('./todos/todo');
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 app.use(cors());
 app.use(bodyParser.json());
+app.use('/todos', todoRoutes);
 app.use('/', authRouter);
 
 mongoose.connect('mongodb://max:170388max@ds127949.mlab.com:27949/apptodo', {
@@ -64,19 +64,32 @@ todoRoutes.route('/update/:id').post((req, res) => {
     });
 });
 
+todoRoutes.route('/delete/:id').post((req, res) => {
+    Todo.findById(req.params.id, (err, todo) => {
+        if (!todo) {
+            res.status(404).send("todo is not found");
+        } else {
+
+            todo.delete().then(todo => {
+                res.json('Todo updated!');
+            })
+              .catch(err => {
+                  res.status(400).send("Update not possible");
+              });
+        }
+    });
+});
+
 todoRoutes.route('/add').post((req, res) => {
     let todo = new Todo(req.body);
     todo.save()
       .then(todo => {
-          res.status(200).json({'todo': 'todo added successfully'});
+          res.status(200).json({'todo': 'todos added successfully'});
       })
       .catch(err => {
-          res.status(400).send('adding new todo failed');
+          res.status(400).send('adding new todos failed');
       });
 });
-
-
-app.use('/todos', todoRoutes);
 
 app.listen(PORT, () => {
     console.debug("Server is running on Port: " + PORT);
