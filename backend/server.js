@@ -1,15 +1,15 @@
 const express = require('express');
-const morgan = require('morgan');
-const chalk = require('chalk');
 const app = express();
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const mongoose = require('mongoose');
 const todoRoutes = express.Router();
-const PORT = 4000;
 const authRouter = require('./auth/AuthController');
-
-let Todo = require('./todo');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const verifyToken = require('./auth/verifyToken');
+const chalk = require('chalk');
+const morgan = require('morgan');
+const PORT = 4000;
+const Todo = require('./todo');
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 app.use(cors());
@@ -17,26 +17,30 @@ app.use(bodyParser.json());
 app.use('/', authRouter);
 
 mongoose.connect('mongodb://max:170388max@ds127949.mlab.com:27949/apptodo', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-  }
-).then(result => {
-    console.log("MongoDB database connection established successfully:");
-    console.log("host: ", chalk.bgBlack.red(result.connections[0].host));
-    console.log('db: ', chalk.bgBlack.red(result.connections[0].name));
-    console.log('user: ', chalk.bgBlack.black(result.connections[0].user));
-    console.log('pass: ', chalk.bgBlack.black(result.connections[0].pass));
-});
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+  .then(result => {
+      console.log("MongoDB database connection established successfully:");
+      console.log("host: ", chalk.bgRgb(20, 20, 20).red(result.connections[0].host));
+      console.log("name: ", chalk.bgRgb(20, 20, 20).red(result.connections[0].name));
+      console.log('db: ', chalk.bgBlack.red(result.connections[0].name));
+      console.log('user: ', chalk.bgBlack.gray(result.connections[0].user));
+      console.log('pass: ', chalk.bgBlack.gray(result.connections[0].pass));
+      console.log(result.models.User);
+      console.log(result.models.Todo);
+  });
 
-todoRoutes.route('/').get((req, res) => {
-    Todo.find((err, todos) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.json(todos);
-        }
-    });
-});
+todoRoutes.route('/').get(
+  (req, res) => {
+      Todo.find((err, todos) => {
+          if (err) {
+              console.log(err);
+          } else {
+              res.json(todos);
+          }
+      });
+  });
 
 todoRoutes.route('/:id').get((req, res) => {
     let id = req.params.id;
