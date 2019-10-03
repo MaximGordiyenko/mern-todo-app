@@ -1,28 +1,31 @@
 const express = require('express');
 const morgan = require('morgan');
+const chalk = require('chalk');
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const todoRoutes = express.Router();
 const PORT = 4000;
+const authRouter = require('./auth/AuthController');
 
 let Todo = require('./todo');
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 app.use(cors());
 app.use(bodyParser.json());
+app.use('/', authRouter);
 
 mongoose.connect('mongodb://max:170388max@ds127949.mlab.com:27949/apptodo', {
       useNewUrlParser: true,
       useUnifiedTopology: true
   }
 ).then(result => {
-    console.log(result);
-});
-
-mongoose.connection.once('open', () => {
-    console.log("MongoDB database connection established successfully");
+    console.log("MongoDB database connection established successfully:");
+    console.log("host: ", chalk.bgBlack.red(result.connections[0].host));
+    console.log('db: ', chalk.bgBlack.red(result.connections[0].name));
+    console.log('user: ', chalk.bgBlack.black(result.connections[0].user));
+    console.log('pass: ', chalk.bgBlack.black(result.connections[0].pass));
 });
 
 todoRoutes.route('/').get((req, res) => {
@@ -65,14 +68,13 @@ todoRoutes.route('/add').post((req, res) => {
     let todo = new Todo(req.body);
     todo.save()
       .then(todo => {
-          res.status(200).json(
-            {'todo': 'todo added successfully'}
-          );
+          res.status(200).json({'todo': 'todo added successfully'});
       })
       .catch(err => {
           res.status(400).send('adding new todo failed');
       });
 });
+
 
 app.use('/todos', todoRoutes);
 
