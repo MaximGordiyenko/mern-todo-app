@@ -47,7 +47,7 @@ export default class EditTodo extends Component {
         e.preventDefault();
         const obj = {
             text: this.state.text,
-            // user_id: this.state.user_id,
+            user_id: this.state.user_id,
             completed: this.state.completed,
             create_data: this.state.create_data
         };
