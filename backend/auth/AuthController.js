@@ -12,7 +12,8 @@ authRouter.use(bodyParser.urlencoded({
 }));
 authRouter.use(bodyParser.json());
 
-authRouter.post('/login',
+authRouter.post(
+  '/login',
   (req, res) => {
       User.findOne({email: req.body.email}, function (err, user) {
           if (err) return res.status(500).send('Error on the server.');
@@ -31,7 +32,8 @@ authRouter.post('/login',
 
   });
 
-authRouter.post('/register',
+authRouter.post(
+  '/register',
   (req, res) => {
       let hashedPassword = bcrypt.hashSync(req.body.password, 8);
       User.create({
@@ -49,7 +51,8 @@ authRouter.post('/register',
         })
   });
 
-authRouter.get('/logout',
+authRouter.get(
+  '/logout',
   (req, res) => {
       res.status(200)
         .send({
@@ -57,7 +60,8 @@ authRouter.get('/logout',
         });
   });
 
-authRouter.get('/me',
+authRouter.get(
+  '/me',
   VerifyToken,
   (req, res, next) => {
       User.findById(

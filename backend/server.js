@@ -14,6 +14,7 @@ const config = require('./db');
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 app.use(cors());
 app.use(bodyParser.json());
+app.use('/', authRouter);
 
 mongoose.connect(config.DB, {
     useNewUrlParser: true,
@@ -29,7 +30,6 @@ mongoose.connect(config.DB, {
     console.log(result.models.Todo);
 });
 
-app.use('/', authRouter);
 app.use('/todos', todoRoute);
 
 app.listen(PORT, () => {
