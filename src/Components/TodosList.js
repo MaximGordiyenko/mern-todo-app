@@ -1,17 +1,6 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
 import axios from 'axios';
-import completed from '../index.css';
-
-const Todo = props => (
-  <tr>
-      <td className={props.todo.completed ? 'completed' : ''}>{props.todo.text}</td>
-      <td className={props.todo.completed ? 'completed' : ''}>{props.todo.create_data}</td>
-      <td>
-          <Link to={"/edit/"+props.todo._id}>Edit</Link>
-      </td>
-  </tr>
-);
+import Todos from "./Todos";
 
 export default class TodosList extends Component {
     state = {
@@ -30,11 +19,17 @@ export default class TodosList extends Component {
           });
     };
 
-    todoList = () => {
-        return this.state.todos.map((currentTodo, i) => {
-            return <Todo todo={currentTodo} key={i}/>;
-        })
+    delete = (id) => {
+        axios.delete('http://localhost:4000/todos/' + id)
+          .then(() => {
+              const newTodos = this.state.todos.filter(el => el._id !== id);
+              this.setState(() => ({
+                  todos: newTodos
+              }));
+          })
+          .catch(err => console.log(err));
     };
+
 
     render() {
         return (
@@ -49,7 +44,10 @@ export default class TodosList extends Component {
                   </tr>
                   </thead>
                   <tbody>
-                  {this.todoList()}
+                  <Todos todos={this.state.todos}
+                         onDelete={this.delete}
+
+                  />
                   </tbody>
               </table>
           </div>
