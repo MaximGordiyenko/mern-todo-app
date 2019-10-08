@@ -4,7 +4,6 @@ import axios from 'axios';
 export default class CreateTodo extends Component {
     state = {
         text: '',
-        user_id: '',
         completed: false,
         create_data: '',
     };
@@ -26,12 +25,11 @@ export default class CreateTodo extends Component {
 
         console.log(`Form submitted:`);
         console.log(`Todo Description: ${this.state.text}`);
-        console.log(`Todo ID: ${this.state.user_id}`);
         console.log(`Todo Create data: ${this.state.create_data}`);
+        console.log(`Todo Create completed: ${this.state.completed}`);
 
         const newTodo = {
             text: this.state.text,
-            // user_id: this.state.user_id,
             completed: this.state.completed,
             create_data: this.state.create_data
         };
@@ -41,7 +39,6 @@ export default class CreateTodo extends Component {
 
         this.setState({
             text: '',
-            user_id: '',
             create_data: '',
             completed: false,
         })
@@ -70,7 +67,9 @@ export default class CreateTodo extends Component {
                       />
                   </div>
                   <div className="form-group">
-                      <input type="submit" value="Create Todo" className="btn btn-primary"/>
+                      <input type="submit"
+                             value="Create Todo"
+                             className="btn btn-primary"/>
                   </div>
               </form>
           </div>

@@ -4,7 +4,7 @@ import CreateTodo from "../src/Components/CreateTodo";
 import EditTodo from "../src/Components/EditTodo";
 import TodosList from "../src/Components/TodosList";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import Login from "./Components/Login";
 import Register from "./Components/Register";
 
 class App extends Component {
@@ -17,19 +17,35 @@ class App extends Component {
                       <div className="collpase navbar-collapse">
                           <ul className="navbar-nav mr-auto">
                               <li className="navbar-item">
-                                  <Link to="/" className="nav-link">Todos</Link>
+                                  <Link to="/todos" className="nav-link">Todos</Link>
                               </li>
                               <li className="navbar-item">
-                                  <Link to="/add" className="nav-link">Create Todo</Link>
+                                  <Link to="/add"
+                                        className="nav-link">
+                                      Create
+                                  </Link>
+                              </li>
+                              <li className="navbar-item">
+                                  <Link to="/login"
+                                        className="nav-link">
+                                      Login
+                                  </Link>
+                              </li>
+                              <li className="navbar-item">
+                                  <Link to="/"
+                                        className="nav-link">
+                                      Register
+                                  </Link>
                               </li>
                           </ul>
                       </div>
                   </nav>
                   <br/>
-                  <Route path="/auth" exact component={Register} />
-                  <Route path="/" exact component={TodosList} />
-                  <Route path="/edit/:id" component={EditTodo} />
-                  <Route path="/add" component={CreateTodo} />
+                  <Route path="/" exact component={Register}/>
+                  <Route path="/login" exact component={Login}/>
+                  <Route path="/todos" exact component={TodosList}/>
+                  <Route path="/edit/:id" exact component={EditTodo}/>
+                  <Route path="/add" exact component={CreateTodo}/>
               </div>
           </Router>
 

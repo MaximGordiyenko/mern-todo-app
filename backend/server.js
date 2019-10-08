@@ -14,7 +14,7 @@ const config = require('./db');
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/', authRouter);
+app.use('/auth', authRouter);
 app.use('/todos', todoRoute);
 
 mongoose.connect(config.DB, {
