@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  
+  todo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: node:12
+    container_name: node-todo-container
+    ports:
+      - "4000:4000"
+  
+  db:
+    image: mongo:4.2
+    container_name: mongo-todo-container
+    environment:
+      - MONGO_DATA_DIR:"/data/db"
+      - MONGO_INITDB_DATABASE:"test"
+      - MONGO_INITDB_ROOT_USERNAME:"root"
+      - MONGO_INITDB_ROOT_PASSWORD:"test"
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
+
+volumes:
+  db-data:
